@@ -1,0 +1,90 @@
+package com.example.rohan.kikoo;
+
+import android.app.Service;
+import android.content.Intent;
+import android.media.MediaPlayer;
+import android.os.Bundle;
+import android.os.IBinder;
+import android.util.Log;
+import android.widget.Toast;
+
+public class AudioService extends Service {
+
+    int mStartMode;
+    int index = -1;
+
+    public IBinder onBind(Intent arg0) {
+
+        return null;
+    }
+
+    @Override
+    public void onCreate() {
+
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        super.onStartCommand(intent,flags, startId);
+        Bundle extras = intent.getExtras();
+        if(extras == null)
+            Log.d("Service","null");
+        else {
+            Log.d("Service", "not null");
+            Float classID = (Float) extras.get("key");
+
+            if (classID == 1)
+                set_audio(R.raw.q_a,1,true);
+            else if (classID == 2)
+                set_audio(R.raw.q_b,2,true);
+            else if (classID == 3)
+                set_audio(R.raw.q_c,3,true);
+            else if (classID == 4)
+                set_audio(R.raw.q_d,4,true);
+            else if (classID == -1)
+                set_audio(R.raw.toomany,-1,false);
+            else
+                set_audio(R.raw.toomany,-1,false);
+
+        }
+        return mStartMode;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Toast.makeText(this, "Service Destroyed", Toast.LENGTH_LONG).show();
+    }
+
+    public void set_audio(int resid,int rec_index,boolean flag)
+    {
+        MediaPlayer mPlayer = new MediaPlayer();
+        if (!mPlayer.isPlaying()){
+            mPlayer = MediaPlayer.create(AudioService.this,resid );
+            mPlayer.start();
+            while (mPlayer.isPlaying()) ;
+            mPlayer.release();
+        }
+        index = rec_index;
+
+        if (flag == true) {
+            Intent intent2 = new Intent(AudioService.this, MainActivity.class);
+            intent2.putExtra("key",index);
+            intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent2);
+        }
+
+        else if(flag == false)
+        {
+            Intent intent1 = new Intent(AudioService.this, DetectLabel.class);
+            intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent1);
+        }
+
+    }
+
+
+}
+
+
+

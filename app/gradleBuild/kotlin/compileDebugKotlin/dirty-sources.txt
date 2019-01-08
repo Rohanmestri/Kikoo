@@ -1,0 +1,2 @@
+C:\Users\Rohan\AndroidStudioProjects\Kikoo\app\src\androidTest\java\com\example\rohan\kikoo\ExampleInstrumentedTest.kt
+C:\Users\Rohan\AndroidStudioProjects\Kikoo\app\src\test\java\com\example\rohan\kikoo\ExampleUnitTest.kt
