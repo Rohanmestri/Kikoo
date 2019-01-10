@@ -52,10 +52,10 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
                     try {
                         // load cascade file from application resources
                         InputStream is = getResources().openRawResource(
-                                R.raw.cascade);
+                                R.raw.kikoo_e6);
                         File cascadeDir = getDir("cascade", Context.MODE_PRIVATE);
                         mCascadeFile = new File(cascadeDir,
-                                "kikoonew.xml");
+                                "kikoo_e6.xml");
                         FileOutputStream os = new FileOutputStream(mCascadeFile);
 
                         byte[] buffer = new byte[4096];
@@ -112,6 +112,7 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
         setContentView(R.layout.activity_opencv);
         Intent myIntent = getIntent();
         index = myIntent.getIntExtra("key", 0);
+        System.out.println("index value "+index);
 
 
         mOpenCvCameraView = (JavaCameraView) findViewById(R.id.HelloOpenCvView);
@@ -159,7 +160,7 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
     }
 
 
-    int scale = 3, count = 0, boxes;
+    int count = 0, boxes;
     int flag = 0;
     double area, rect_area;
     double extent, contourWidth, contourHeight,aspectratio;
@@ -182,7 +183,7 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
         count++;
 
 
-        if (count == 24) {
+        if (count == 20) {
             count = 0;
 
             //Imgproc.resize(mGray, mGray, new Size(mGray.cols() / scale, mGray.rows() / scale));
@@ -229,9 +230,6 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
                 area = Imgproc.contourArea(contour2f);
                 rect = Imgproc.boundingRect(contours.get(contourIdx));
                 rect_area = rect.area();
-                if(rect_area > 50000){
-                    System.out.println("rects area = "+rect_area);
-                }
                 if(rect_area>50000 && rect_area<100000) {
                     Maxrect.add(rect);
                     minX = rect.x;
@@ -239,7 +237,7 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
                     minY = rect.y;
                     maxY = rect.y + rect.height;
                     System.out.println("coor "+minX+" "+maxX+" "+minY+" "+maxY);
-                    Imgproc.drawContours(mRgba, contours, contourIdx, new Scalar(0, 0, 255), 2);
+                    Imgproc.drawContours(mRgba, contours, contourIdx, new Scalar(0, 0, 255), 1);
                 }
             }
 
@@ -270,9 +268,6 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
 
         }
 
-        List<Rect> nonDupRects = new ArrayList();
-        System.out.println("total rects = "+rects.size());
-
         //sorting all the contours
         for (int i = 0; i < rects.size()-1; i++) {
             for (int j = 0; j < rects.size()-1; j++) {
@@ -284,30 +279,10 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
             }
         }
 
-        //removing duplicates
-        int flag = 0;
-        for(int i = 0; i<rects.size(); i++ ){
-            nonDupRects.add(rects.get(i));
-            /*
-
-
-            if((rects.get(i).x == rects.get(i+1).x) && (flag != 1)){
-                flag = 1;
-                nonDupRects.add(rects.get(i));
-                continue;
-            }
-            if(flag == 0)
-                nonDupRects.add(rects.get(i));
-            if(flag == 1){
-                flag = 0;
-            }
-            */
-        }
-
-        System.out.println("rect detail "+rects);
-        System.out.println("nonDup detail "+nonDupRects);
-        System.out.println("boxes "+ nonDupRects.size());
-        return nonDupRects;
+        //System.out.println("rect detail "+rects);
+        //System.out.println("nonDup detail "+nonDupRects);
+        //System.out.println("boxes "+ nonDupRects.size());
+        return rects;
 
     }
 
@@ -322,24 +297,25 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
 
                 if (mJavaDetector != null) {
                     mJavaDetector.detectMultiScale(crop, detect, 1.05, 2,
-                            2, new Size(4, 4), new Size(500, 500));
+                            0, new Size(4, 4), new Size(100, 100));
                 }
 
                 num_string = String.valueOf(i + 1);
-                text = new String("Kikoo was found in option ".concat(num_string));
+
                 if (detect.toArray().length != 0) {
                     foundKikoo = true;
+                    text = new String("Kikoo was found in option ".concat(num_string));
+                    System.out.println("no of detection="+detect.toArray().length);
                     detectedAnswer = (i+1);
                     Imgproc.putText(mRgba, text, new Point(10, 50), 3, 1, new Scalar(255, 255, 255, 255), 2);
 
-                    if(detectedAnswer < 4 && (foundKikoo)) {
-
+                    if((detectedAnswer < 4) && (foundKikoo)) {
+                        foundKikoo = false;
                         if (index <= 0) {
-                            System.out.println("yes");
                             return;
                         }
                         if (correctAnswer[index - 1] == detectedAnswer) {
-                            System.out.println("yes");
+                            System.out.println("found kikoo in " + num_string);
                             Imgproc.putText(mRgba, "Correct Answer", new Point(10, 300), 3, 1, new Scalar(255, 255, 255, 255), 2);
                             Intent intent = new Intent(MainActivity.this, FeedbackService.class);
                             Bundle b = new Bundle();
@@ -349,7 +325,7 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
                             startService(intent);
                             //finish();
                         } else {
-                            System.out.println("yes");
+                            System.out.println("kikoo not found in " + num_string);
                             Imgproc.putText(mRgba, "Wrong Answer", new Point(10, 300), 3, 1, new Scalar(255, 255, 255, 255), 2);
                             Intent intent = new Intent(MainActivity.this, FeedbackService.class);
                             Bundle b = new Bundle();
@@ -358,13 +334,14 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
                             intent.putExtras(b); //Put your id to your next Intent
                             startService(intent);
                             //finish();
+
                         }
                     }
                 }
                 if (detect.toArray().length == 0){
                     System.out.println("value inside0 "+(i+1));
                     Imgproc.putText(mRgba, "Kikoo not Found", new Point(10, 50), 3, 1, new Scalar(255, 255, 255, 255), 2);
-                    foundKikoo = false;
+
                 }
             }
         }
