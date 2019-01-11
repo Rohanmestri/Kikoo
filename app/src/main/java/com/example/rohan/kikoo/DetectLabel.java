@@ -47,7 +47,7 @@ public class DetectLabel extends Activity implements CameraBridgeViewBase.CvCame
     TensorFlowInferenceInterface inferenceInterface;
 
     AssetManager assetManager;
-    final String modelFilename = "file:///android_asset/model2.pb";
+    final String modelFilename = "file:///android_asset/frozen_inference_graph14k.pb";
     String labelFilename = "file:///android_asset/labels";
 
     Vector<String> labels = new Vector<String>();
