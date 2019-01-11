@@ -34,13 +34,37 @@ public class AudioService extends Service {
             Float classID = (Float) extras.get("key");
 
             if (classID == 1)
-                set_audio(R.raw.q_a,1,true);
+                set_audio(R.raw.a,1,true);
             else if (classID == 2)
-                set_audio(R.raw.q_b,2,true);
+                set_audio(R.raw.b,2,true);
             else if (classID == 3)
-                set_audio(R.raw.q_c,3,true);
+                set_audio(R.raw.c,3,true);
             else if (classID == 4)
-                set_audio(R.raw.q_d,4,true);
+                set_audio(R.raw.d,4,true);
+            else if (classID == 5)
+                set_audio(R.raw.e,5,true);
+            else if (classID == 6)
+                set_audio(R.raw.f,6,true);
+            else if (classID == 7)
+                set_audio(R.raw.g,7,true);
+            else if (classID == 8)
+                set_audio(R.raw.h,8,true);
+            else if (classID == 9)
+                set_audio(R.raw.i,9,true);
+            else if (classID == 10)
+                set_audio(R.raw.j,10,true);
+            else if (classID == 11)
+                set_audio(R.raw.k,11,true);
+            else if (classID == 12)
+                set_audio(R.raw.l,12,true);
+            else if (classID == 13)
+                set_audio(R.raw.m,13,true);
+            else if (classID == 14)
+                set_audio(R.raw.n,14,true);
+            else if (classID == 15)
+                set_audio(R.raw.o,15,true);
+            else if (classID == 16)
+                set_audio(R.raw.p,16,true);
             else if (classID == -1)
                 set_audio(R.raw.toomany,-1,false);
             else
