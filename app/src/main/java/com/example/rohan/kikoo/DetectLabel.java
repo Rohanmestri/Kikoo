@@ -18,6 +18,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
 
+
 import org.opencv.imgproc.Imgproc;
 import org.tensorflow.Graph;
 import org.tensorflow.Operation;
@@ -25,7 +26,7 @@ import org.tensorflow.contrib.android.TensorFlowInferenceInterface;
 
 public class DetectLabel extends Activity implements CameraBridgeViewBase.CvCameraViewListener2 {
 
-    private static final Logger LOGGER = new Logger();
+    //private static final Logger LOGGER = new Logger();
     private static final int MAX_RESULTS = 100;
     private boolean logStats = false;
 
@@ -114,7 +115,7 @@ public class DetectLabel extends Activity implements CameraBridgeViewBase.CvCame
             br = new BufferedReader(new InputStreamReader(labelsInput));
             String line;
             while ((line = br.readLine()) != null) {
-                LOGGER.w(line);
+                //LOGGER.w(line);
                 labels.add(line);
             }
             br.close();
