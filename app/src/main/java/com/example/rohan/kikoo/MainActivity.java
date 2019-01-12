@@ -258,7 +258,7 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
                 rect_area = rect.area();
                 if((rect.x>minX)&&(rect.y>minY)&&(rect.x<maxX)&&(rect.y<maxY)) {
 
-                    if (rect_area > 4000 && rect_area < 8000) {
+                    if (rect_area > 3500 && rect_area < 7000) {
                         rects.add(rect);
                         Imgproc.drawContours(mRgba, contours, contourIdx, new Scalar(0, 0, 255), 2);
                         String areatext = "" + rect_area;
@@ -304,14 +304,12 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
                 num_string = String.valueOf(i + 1);
 
                 if (detect.toArray().length != 0) {
-                    foundKikoo = true;
                     text = new String("Kikoo was found in option ".concat(num_string));
                     System.out.println("no of detection="+detect.toArray().length);
                     detectedAnswer = (i+1);
                     Imgproc.putText(mRgba, text, new Point(10, 50), 3, 1, new Scalar(255, 255, 255, 255), 2);
 
-                    if((detectedAnswer < 4) && (foundKikoo)) {
-                        foundKikoo = false;
+                    if((detectedAnswer < 4)) {
                         if (index <= 0) {
                             return;
                         }
@@ -320,7 +318,7 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
                             Imgproc.putText(mRgba, "Correct Answer", new Point(10, 300), 3, 1, new Scalar(255, 255, 255, 255), 2);
                             Intent intent = new Intent(MainActivity.this, FeedbackService.class);
                             Bundle b = new Bundle();
-                            b.putFloat("Key", 2); //Your id
+                            b.putFloat("feedbackKey", 2); //Your id
                             b.putInt("label", index);
                             intent.putExtras(b); //Put your id to your next Intent
                             startService(intent);
@@ -330,7 +328,7 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
                             Imgproc.putText(mRgba, "Wrong Answer", new Point(10, 300), 3, 1, new Scalar(255, 255, 255, 255), 2);
                             Intent intent = new Intent(MainActivity.this, FeedbackService.class);
                             Bundle b = new Bundle();
-                            b.putFloat("Key", 1);
+                            b.putFloat("feedbackKey", 1);
                             b.putInt("label", index);//Your id
                             intent.putExtras(b); //Put your id to your next Intent
                             startService(intent);
@@ -345,6 +343,14 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
 
                 }
             }
+        }else{
+            Imgproc.putText(mRgba, "Place Kikoo inside Box", new Point(10, 50), 3, 1, new Scalar(255, 255, 255, 255), 2);
+            Intent intent = new Intent(MainActivity.this, FeedbackService.class);
+            Bundle b = new Bundle();
+            b.putFloat("feedbackKey", 3);
+            b.putInt("label", index);//Your id
+            intent.putExtras(b); //Put your id to your next Intent
+            startService(intent);
         }
     }
 }

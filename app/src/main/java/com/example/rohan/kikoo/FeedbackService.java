@@ -30,7 +30,7 @@ public class FeedbackService extends Service {
             Log.d("Service","null");
         else {
             Log.d("Service", "not null");
-            Float feedbackKey = (Float) extras.get("Key");
+            Float feedbackKey = (Float) extras.get("feedbackKey");
             int label = (int) extras.get("label");
 
 
@@ -51,6 +51,15 @@ public class FeedbackService extends Service {
                     while (mPlayer.isPlaying()) ;
                     mPlayer.release();
                     Intent intent2 = new Intent(FeedbackService.this, DetectLabel.class);
+                    intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent2);
+                }else if (feedbackKey == 3) {
+                    mPlayer = MediaPlayer.create(FeedbackService.this, R.raw.inside_box);
+                    mPlayer.start();
+                    while (mPlayer.isPlaying()) ;
+                    mPlayer.release();
+                    Intent intent2 = new Intent(FeedbackService.this, MainActivity.class);
+                    intent2.putExtra("key",label);
                     intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent2);
                 }
