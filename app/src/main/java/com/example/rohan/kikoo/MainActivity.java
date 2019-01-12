@@ -167,13 +167,14 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
     Rect rect,temp_rect;
     String text, num_string,temp;
     Mat crop, temp_frame;
-    int[] correctAnswer = new int[]{1,3,2,1};
+    int[] correctAnswer = new int[]{2,3,1,1,2,1,2,1,3,1,1,3,3,2,2,2};
 
 
 
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
 
         mRgba = inputFrame.rgba();
+        System.out.println("MAT "+ mRgba);
         mGray = inputFrame.gray();
 
         MatOfRect kikoo = new MatOfRect();
@@ -296,7 +297,7 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
                 crop = new Mat  (temp_frame, temp.get(i));
 
                 if (mJavaDetector != null) {
-                    mJavaDetector.detectMultiScale(crop, detect, 1.05, 2,
+                    mJavaDetector.detectMultiScale(crop, detect, 1.05, 0,
                             0, new Size(4, 4), new Size(100, 100));
                 }
 
