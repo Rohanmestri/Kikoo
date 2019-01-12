@@ -304,10 +304,9 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
                 num_string = String.valueOf(i + 1);
 
                 if (detect.toArray().length != 0) {
-                    text = new String("Kikoo was found in option ".concat(num_string));
                     System.out.println("no of detection="+detect.toArray().length);
                     detectedAnswer = (i+1);
-                    Imgproc.putText(mRgba, text, new Point(10, 50), 3, 1, new Scalar(255, 255, 255, 255), 2);
+                    Imgproc.putText(mRgba, "Kikoo was found in option "+num_string, new Point(10, 50), 3, 1, new Scalar(255, 255, 255, 255), 2);
 
                     if((detectedAnswer < 4)) {
                         if (index <= 0) {
@@ -343,7 +342,8 @@ public class MainActivity extends Activity implements CameraBridgeViewBase.CvCam
 
                 }
             }
-        }else{
+        }
+        if((temp.size()>0) && (temp.size()<3)){
             Imgproc.putText(mRgba, "Place Kikoo inside Box", new Point(10, 50), 3, 1, new Scalar(255, 255, 255, 255), 2);
             Intent intent = new Intent(MainActivity.this, FeedbackService.class);
             Bundle b = new Bundle();
