@@ -13,7 +13,14 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        ndk
+                {
+                    abiFilters "armeabi-v7a", "x86","arm64-v8a"
+                }
     }
+
+
     buildTypes {
         release {
             minifyEnabled false
@@ -32,7 +39,5 @@ dependencies {
     implementation project(':openCVLibrary341')
     implementation 'org.tensorflow:tensorflow-android:+'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-
-
 }
 
